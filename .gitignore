@@ -1,0 +1,29 @@
+library/
+/vendor
+settings.php
+.project/
+.vagrant/
+.idea/
+cache/
+web/swagger-ui/
+custom
+.DS_Store
+web/theme/custom
+node_modules
+results.xml
+containers/
+web/dist
+cypress/videos/
+modules/bundle*.js*
+modules/assets/pdfjs
+
+# The OpenOOH specification
+openooh/
+openooh/specification.json
+
+# PHPStorm config
+tests/http-client.private.env.json
+/.phpunit.result.cache
+
+# Hide module/template translate file
+locale/moduletranslate.php

@@ -1,0 +1,167 @@
+{#
+/**
+ * Copyright (C) 2024 Xibo Signage Ltd
+ *
+ * Xibo - Digital Signage - https://xibosignage.com
+ *
+ * This file is part of Xibo.
+ *
+ * Xibo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * Xibo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Xibo.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#}
+{% extends "authed.twig" %}
+{% import "inline.twig" as inline %}
+
+{% set isXiboThemed = theme.getThemeConfig("app_name") == "Xibo" %}
+
+{% block title %}{{ "Welcome"|trans }} | {% endblock %}
+
+{% block pageContent %}
+    <div class="container-fluid">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            {% set productName = theme.getThemeConfig('theme_title') %}
+                            <h2>{% trans %}Welcome to the {{productName}} CMS{% endtrans %}</h2>
+                            <p>{% trans %}This is the content management system, or CMS for short, where you upload your images/videos, create and schedule your layouts, and manage your display network.{% endtrans %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        {% if currentUser.featureEnabled("displays.view") %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Overview"|trans }} <i class="fas fa-list-alt float-right"></i></h5>
+                                    <p class="card-text">{{ "The Content Management System (CMS) is where content is created/uploaded and scheduled to Displays. A Player application downloads new content and schedules from the CMS to display on screens."|trans }}</p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">{{ "The player application needs to run on a device attached a screen and a network so that is can connector to the CMS to download new content at regular defined intervals."|trans }}</li>
+                                    <li class="list-group-item">{{ "Downloaded content from the CMS is cached to the Player so if there is a problem connecting to the CMS, it can continue to show the stored content until the connection between the CMS and Player is re-established."|trans }}</li>
+                                    <li class="list-group-item">{{ "Once downloaded, the player checks the schedule it has been sent and will show the appropriate content based on the local date and time."|trans }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Install / Upgrade"|trans }} <i class="fas fa-download float-right"></i></h5>
+                                    {% if isXiboThemed %}
+                                        <p class="card-text">{{ "We have player software available for Android, LG webOS, Samsung Tizen, and Windows."|trans }}</p>
+                                        <p class="card-text">{{ "There are installation and upgrade guides for all these options in our documentation."|trans }}</p>
+                                        <p class="card-text">{{ "If you are undecided which device to use, our installation documentation is a good place to see what options are available."|trans }}</p>
+                                        <a href="https://xibosignage.com/install-upgrade#install" target="_blank"  class="card-link">Install</a>
+                                        <a href="https://xibosignage.com/install-upgrade#upgrade" target="_blank"  class="card-link">Upgrade</a>
+                                    {% else %}
+                                        <p class="card-text">{{ "Your service provider can help you with installation and upgrade."|trans }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if currentUser.featureEnabled("library.view") or currentUser.featureEnabled("layout.view") %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Content"|trans }} <i class="fas fa-icons float-right"></i></h5>
+                                    <p class="card-text">{{ "A Layout is the complete content design to be shown on Displays. With a powerful Layout Editor Users can easily create eye catching content without having to leave the Xibo CMS."|trans }}</p>
+                                    <p class="card-text">{{ "Media is the content we want to show on Displays, such as images and videos."|trans }}</p>
+                                    {% if currentUser.featureEnabled("layout.view") %}
+                                    <a class="card-link" href="{{ url_for("layout.view") }}">{% trans "Layouts" %}</a>
+                                    {% endif %}
+
+                                    {% if currentUser.featureEnabled("library.view") %}
+                                    <a class="card-link" href="{{ url_for("library.view") }}">{% trans "Media" %}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if currentUser.featureEnabled("schedule.view") %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Schedule"|trans }} <i class="fas fa-calendar-alt float-right"></i></h5>
+                                    <p class="card-text">{{ "Scheduling is highly flexible and supports scheduling to single Displays as well as to Display Groups. Displays check for new scheduled content periodically and will download new items in advance of playback."|trans }}</p>
+                                    <a class="card-link" href="{{ url_for("schedule.view") }}">{% trans "Schedule" %}</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if currentUser.featureEnabled("displays.view") %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Displays"|trans }} <i class="fa fa-tv float-right"></i></h5>
+                                    <p class="card-text">{{ "A Display is the connection from the Player to the CMS which groups together content and schedule information. Each Display is uniquely identified in the CMS so that each Display can have its own Media content, Layout designs and Schedules available each with uniquely identified Reporting statistics."|trans }}</p>
+                                    <a class="card-link" href="{{ url_for("display.view") }}">{% trans "Displays" %}</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Documentation"|trans }} <i class="fas fa-book-open float-right"></i></h5>
+                                    <p class="card-text">{% trans "Documentation for administrators, developers and users." %}</p>
+                                    <p class="card-text">{% trans "All of our documentation is regularly updated to reflect changes and additions to the platform, and so a valuable reference tool for all users!" %}</p>
+                                    <a class="card-link" href="{{ helpService.getLandingPage() }}" target="_blank">{{ "User Manual"|trans }}</a>
+                                    {% if isXiboThemed and currentUser.isSuperAdmin() %}
+                                        <a class="card-link" href="https://xibosignage.com/docs/setup" target="_blank">{{ "Admin"|trans }}</a>
+                                        <a class="card-link" href="https://xibosignage.com/docs/developer" target="_blank">{{ "Developer"|trans }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if isXiboThemed %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Training"|trans }} <i class="fas fa-user-alt float-right"></i></h5>
+                                    <p class="card-text">{% trans "Self-paced online training videos designed to get you up and running with Xibo in no time." %}</p>
+                                    <a class="card-link" href="https://xibosignage.com/training" target="_blank">{{ "New User Training"|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ "Help"|trans }} <i class="fa fa-question-circle float-right"></i></h5>
+                                    <p class="card-text">{% trans "We are here to help! All the support you’re looking for, at your fingertips." %}</p>
+                                    {% if isXiboThemed %}
+                                        <a href="https://xibosignage.com/install-upgrade#install" target="_blank"  class="card-link">{{ "Help Center"|trans }}</a>
+                                        <a href="https://community.xibo.org.uk" target="_blank"  class="card-link">Community</a>
+                                    {% else %}
+                                        <p class="card-text">{{ "Contact your service provider for assistance."|trans }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
