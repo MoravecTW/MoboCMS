@@ -48,7 +48,7 @@ services:
             MEMCACHED_HOST: ${MEMCACHED_HOST}
             GIT_COMMIT: ${GIT_COMMIT}
             TZ: ${TZ}
-        image: moboweb:v1.0-alpha
+        image: moboweb
         volumes:
             - "./shared/cms/custom:/var/www/cms/custom:Z"
             - "./shared/backup:/var/www/backup:Z"
