@@ -48,7 +48,7 @@ services:
             MEMCACHED_HOST: ${MEMCACHED_HOST}
             GIT_COMMIT: ${GIT_COMMIT}
             TZ: ${TZ}
-        image: moboweb
+        image: moboweb:v1.0-alpha
         volumes:
             - "./shared/cms/custom:/var/www/cms/custom:Z"
             - "./shared/backup:/var/www/backup:Z"
@@ -74,6 +74,6 @@ services:
         mem_limit: 100M
         container_name: MoboCMS-memcached
     mobo-quickchart:
-      image: ianw/quickchart
+      image: ianw/quickchart:v1.8.1
       restart: always
       container_name: MoboCMS-quickchart

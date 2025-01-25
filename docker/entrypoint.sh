@@ -191,7 +191,7 @@ then
   mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='Apache', \`userChange\`=0, \`userSee\`=0 WHERE \`setting\`='SENDFILE_MODE' LIMIT 1"
 
   # Set admin username/password
-  mysql -D $MYSQL_DATABASE -e "UPDATE \`user\` SET \`UserName\`='xibo_admin', \`UserPassword\`='5f4dcc3b5aa765d61d8327deb882cf99' WHERE \`UserID\` = 1 LIMIT 1"
+  mysql -D $MYSQL_DATABASE -e "UPDATE \`user\` SET \`UserName\`='mobo', \`UserPassword\`='e3d55f426060354e53e323618fc808e3' WHERE \`UserID\` = 1 LIMIT 1"
 
   # Set XMR public/private address
   mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='tcp://$XMR_HOST:50001', \`userChange\`=0, \`userSee\`=0 WHERE \`setting\`='XMR_ADDRESS' LIMIT 1"
@@ -199,6 +199,12 @@ then
 
   # Set CMS Key
   mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='$CMS_KEY' WHERE \`setting\`='SERVER_KEY' LIMIT 1"
+
+  # Set various settings
+  mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='$TZ' WHERE \`setting\`='defaultTimezone' LIMIT 1"
+  mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='zh_TW' WHERE \`setting\`='DEFAULT_LANGUAGE' LIMIT 1"
+  mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='25.033964' WHERE \`setting\`='DEFAULT_LAT' LIMIT 1"
+  mysql -D $MYSQL_DATABASE -e "UPDATE \`setting\` SET \`value\`='121.564468' WHERE \`setting\`='DEFAULT_LONG' LIMIT 1"
 
   # Configure Maintenance
   echo "Setting up Maintenance"
